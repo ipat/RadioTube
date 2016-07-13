@@ -11,12 +11,24 @@ app.get("/", function(req, res) {
 	res.render("page");
 });
 
+
+app.get("/room/:roomId", function(req, res) {
+	res.render("page", {roomId: req.params['roomId']});
+});
+
 var io = require('socket.io').listen(app.listen(port));
 console.log("Listening on port " + port);
 
 io.sockets.on('connection', function(socket) {
+	var room;
 	socket.emit('message', {message: 'welcome to the chat'});
+	socket.on('createroom', function(curRoom) {
+		room = curRoom;
+		socket.join(room);
+		console.log(room);
+	});
 	socket.on('send', function(data){
-		io.sockets.emit('message', data);
+		console.log("send" + room);
+		io.sockets.in(room).emit('message', data);
 	});
 });

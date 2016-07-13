@@ -1,9 +1,10 @@
 window.onload = function() {
 	var messages = [];
-	var socket = io.connect('http://localhost:3700');
-	var field = document.getElementById("field");
 	var sendButton = document.getElementById("send");
 	var content = document.getElementById("content");
+	var field = document.getElementById("field");
+	var socket = io.connect('http://localhost:3700');
+	socket.emit('createroom', roomId);
 
 	socket.on('message', function(data) {
 		if(data.message) {
@@ -18,7 +19,7 @@ window.onload = function() {
 
 		}
 	});
-	console.log(field);
+
 	sendButton.onclick = function() {
 		var text = field.value;
 		socket.emit('send', { message: text });

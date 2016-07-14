@@ -1,3 +1,4 @@
+var redis = require('redis');
 var express = require("express");
 var app = express();
 var port = 3700;
@@ -16,8 +17,8 @@ app.get("/room/:roomId", function(req, res) {
 	res.render("page", {roomId: req.params['roomId']});
 });
 
-var io = require('socket.io').listen(app.listen(port));
-console.log("Listening on port " + port);
+var io = require('socket.io').listen(app.listen(process.env.PORT));
+console.log("Listening on port " + process.env.PORT);
 
 io.sockets.on('connection', function(socket) {
 	var room;
